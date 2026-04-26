@@ -45,7 +45,7 @@ function Register() {
         min-height: 100vh;
         font-family: 'Inter', system-ui, sans-serif;
 
-        background: radial-gradient(circle at top left, #f8f8f8, #c1cd82);
+        background: radial-gradient(circle at top left, #f8ffea, #bbbb63);
         }
 
         #root { width: 100%; }
@@ -136,16 +136,18 @@ function Register() {
 }
 
 .b3 {
-  background: #d8abc2;
+  background: #d868a2;
   top: 40%;
   left: 50%;
 }
-    .bg-blobs {
+.bg-blobs {
   position: fixed;
   inset: 0;
-  z-index: 0;   /* background layer */
-  pointer-events: none; /* VERY IMPORTANT */
+  z-index: -1;   /* 👈 push fully behind page */
+  pointer-events: none;
+  overflow: hidden;
 }
+
 
         @media (max-width: 850px) {
           .right { display: none; }
