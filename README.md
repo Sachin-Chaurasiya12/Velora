@@ -16,11 +16,10 @@ Backend:
 - REST APIs
 
 Frontend:
-- HTML5
-- CSS3
-- JavaScript
-- SockJS
-- STOMP.js
+React.js
+javascript
+Html
+CSS3
 
 ## 🏗️ Architecture
 
