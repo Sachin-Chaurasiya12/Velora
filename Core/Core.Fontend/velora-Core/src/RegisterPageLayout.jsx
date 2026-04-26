@@ -165,11 +165,19 @@ function Register() {
             
             <h2>Create Account</h2>
             <div className="sub">Join us and start your journey today.</div>
+
+            <input 
+              type="text" 
+              name="fullName"
+              placeholder="UserName" 
+              value={formData.fullName} 
+              onChange={handleChange} 
+            />
             
             <input 
               type="text" 
               name="fullName"
-              placeholder="Full Name" 
+              placeholder="Name" 
               value={formData.fullName} 
               onChange={handleChange} 
             />

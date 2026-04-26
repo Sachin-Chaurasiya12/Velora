@@ -254,6 +254,44 @@ function Login() {
               {loading ? "Signing in..." : "Log In"}
             </button>
 
+            <button
+            onClick={() => (window.location.href = "/auth/google")}
+            style={{
+              marginTop: "12px",
+              background: "#fff",
+              color: "#111827",
+              border: "1px solid #e5e7eb",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 48 48">
+              <path
+                fill="#EA4335"
+                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.9-6.9C35.9 2.34 30.4 0 24 0 14.62 0 6.51 5.38 2.56 13.22l8.06 6.26C12.6 13.08 17.88 9.5 24 9.5z"
+              />
+              <path
+                fill="#4285F4"
+                d="M46.5 24.5c0-1.64-.15-3.21-.43-4.72H24v9.02h12.6c-.54 2.9-2.18 5.37-4.64 7.03l7.19 5.58C43.98 37.04 46.5 31.32 46.5 24.5z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M10.62 28.48a14.5 14.5 0 010-8.96L2.56 13.22A24 24 0 000 24c0 3.84.9 7.46 2.56 10.78l8.06-6.3z"
+              />
+              <path
+                fill="#34A853"
+                d="M24 48c6.48 0 11.93-2.13 15.9-5.8l-7.19-5.58c-2.01 1.35-4.6 2.16-8.71 2.16-6.12 0-11.4-3.58-13.38-8.82l-8.06 6.3C6.51 42.62 14.62 48 24 48z"
+              />
+            </svg>
+
+            Continue with Google
+          </button>
+
+
+
             <div className="small">
               Don’t have an account? <Link to="/register">Sign Up</Link>
             </div>
