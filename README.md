@@ -16,10 +16,10 @@ Backend:
 - REST APIs
 
 Frontend:
-React.js
-javascript
-Html
-CSS3
+- React.js
+- javascript
+- Html
+- CSS3
 
 ## 🏗️ Architecture
 
