@@ -82,7 +82,7 @@ chat-app/
 
 ## ▶️ Setup Instructions
 
-git clone https://github.com/your-username/valora-chat.git  
+git clone https://github.com/your-username/valora.git  
 cd valora-chat  
 cd backend  
 mvn spring-boot:run  
@@ -115,9 +115,9 @@ Fork the repo, create a branch, make changes, and submit a pull request.
 
 ## 📜 License
 
-MIT License
+Apache licence 2.0
 
 ## 👨‍💻 Author
 
-Developed by Your Name  
-GitHub: https://github.com/your-username
+Developed by Sachin Chaurasiya
+GitHub: https://github.com/Sachin-Chaurasiya12
