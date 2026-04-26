@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #e5e5e5;
+    font-family: system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+
+/* wrapper fix */
+.auth-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* MAIN CARD */
+.auth-card {
+    width: 1000px;
+    height: 600px;
+    display: flex;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    background: white;
+}
+
+/* LEFT */
+.left {
+    flex: 1;
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.brand {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.sub {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 25px;
+}
+
+/* INPUTS */
+input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+input:focus {
+    border-color: #111;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #111;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #000;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* RIGHT */
+.right {
+    flex: 1;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+/* QUOTE */
+.quote {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    right: 25px;
+    background: rgba(255,255,255,0.85);
+    padding: 15px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    backdrop-filter: blur(10px);
+}
