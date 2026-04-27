@@ -1,4 +1,4 @@
-package com.Velora.AuthService.security;
+package com.CodeSparrow.AuthService.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +22,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
+        return http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -36,9 +36,9 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            .httpBasic(Customizer.withDefaults());
+            // .httpBasic(Customizer.withDefaults());
 
-        return http.build();
+            .build();
     }
 
     @Bean

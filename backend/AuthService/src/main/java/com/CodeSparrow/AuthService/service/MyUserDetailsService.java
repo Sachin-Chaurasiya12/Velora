@@ -1,4 +1,4 @@
-package com.Velora.AuthService.service;
+package com.CodeSparrow.AuthService.service;
 
 import java.util.Optional;
 
@@ -8,9 +8,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.Velora.AuthService.model.Users;
-import com.Velora.AuthService.model.UsersPrinciple;
-import com.Velora.AuthService.repository.UserRepository;
+import com.CodeSparrow.AuthService.model.Users;
+import com.CodeSparrow.AuthService.model.UsersPrinciple;
+import com.CodeSparrow.AuthService.repository.UserRepository;
+
+
 
 @Service
 public class MyUserDetailsService implements UserDetailsService{

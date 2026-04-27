@@ -1,4 +1,7 @@
-package com.Velora.AuthService.model;
+package com.CodeSparrow.AuthService.model;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -32,16 +35,18 @@ public class Users {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+    private LocalDate CreatedAt;
 
     // Constructors
     public Users() {}
 
-    public Users(Long id, String name, String username, String email, String password) {
-        this.id = id;
+    public Users(String name, String username, String email, String password,Role Role,LocalDate CreatedAt) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.CreatedAt = CreatedAt;
+        this.role = Role;
     }
 
     // Getters and Setters
@@ -84,4 +89,16 @@ public class Users {
     public void setPassword(String password) {
         this.password = password;
     }
-}
+    public Role getRole() {
+        return role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
+    }
+    public LocalDate getCreatedAt() {
+        return CreatedAt;
+    }
+    public void setCreatedAt(LocalDate createdAt) {
+        CreatedAt = createdAt;
+    }
+}   

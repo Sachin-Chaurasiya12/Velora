@@ -1,4 +1,4 @@
-package com.Velora.AuthService.model;
+package com.CodeSparrow.AuthService.model;
 
 import java.nio.file.attribute.UserPrincipal;
 import java.util.Collection;
