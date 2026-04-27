@@ -124,10 +124,12 @@ Database (MYSQL)
 ## ⚙️ How It Works
 
 1. User logs in  
-2. Solves a DSA problem  
-3. Saves useful code/snippet  
-4. Tags and organizes it  
-5. Reuses it later or shares with friends  
+2. Solves a DSA problem
+3. Gain Points
+4. Saves useful code/snippet  
+5. Tags and organizes it
+6. buy useful resources for learning
+7. Reuses it later or shares with friends  
 
 ---
 
