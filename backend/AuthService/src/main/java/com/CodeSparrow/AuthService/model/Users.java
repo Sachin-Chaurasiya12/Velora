@@ -1,7 +1,6 @@
 package com.CodeSparrow.AuthService.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
