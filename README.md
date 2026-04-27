@@ -80,7 +80,7 @@ API Layer (JWT Auth)
 | Points Service                  |
 -----------------------------------
         ↓
-Database (PostgreSQL)
+Database (MYSQL)
 
 ---
 
@@ -101,7 +101,7 @@ Database (PostgreSQL)
 ---
 
 ### Database:
-- PostgreSQL  
+- MYSQL  
 
 ---
 
