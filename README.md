@@ -1,122 +1,186 @@
-# 💬 Valora Chat
+# 🧠 CodeSparrow
 
-A secure real-time 1-to-1 chat application built using Spring Boot WebSockets and REST APIs with a frontend client. The project demonstrates a full-stack messaging system with authentication, secure communication, and real-time user-to-user chat.
+A developer-focused platform to **practice DSA, store reusable code, and build a personal knowledge system**—all in one place.
+
+---
 
 ## 🚀 Overview
 
-Valora Chat is a full-stack messaging system where users can register, authenticate securely, connect via WebSocket, and send private messages in real time using a secure backend API architecture. It demonstrates real-world backend engineering concepts like authentication, WebSockets, and message routing.
+**CodeSparrow** is designed to solve a common problem:
 
-## 🧰 Tech Stack
+> Developers solve problems but forget patterns and struggle to reuse solutions later.
 
-Backend:
-- Spring Boot
-- Spring WebSocket (STOMP protocol)
-- Spring Security
-- JWT Authentication
-- REST APIs
+This platform connects learning, storing, and reusing code into a single workflow:
 
-Frontend:
-- React.js
-- javascript
-- Html
-- CSS3
+Solve Problem → Extract Pattern → Save Snippet → Reuse Anytime
 
-## 🏗️ Architecture
+---
 
-Frontend (Browser) → REST API + WebSocket Connection → Spring Boot Backend → Spring Security (JWT Authentication) → Message Routing Layer → Target User
+## 🎯 Core Idea
+
+Instead of using multiple tools for different purposes, CodeSparrow combines:
+
+- DSA practice  
+- Code snippet storage  
+- Personal knowledge management  
+
+Into one unified system focused on **learning retention and reuse**.
+
+---
 
 ## ✨ Features
 
-- Secure user authentication using JWT
-- Real-time private messaging (1-to-1 chat)
-- WebSocket-based communication channel
-- User session management
-- Secure message routing between authenticated users
-- Lightweight frontend client
+### 📦 Code Vault
+- Store reusable code snippets  
+- Tag-based organization  
+- Search by keyword or use-case  
+- Favorite important snippets  
 
-## 🔐 Security Model
+---
 
-- Passwords encrypted using BCrypt
-- JWT token-based authentication
-- WebSocket handshake validation
-- Protected REST API endpoints
-- Authorized message delivery only between valid users
+### 🧠 DSA Arena
+- Practice coding problems (Easy / Medium / Hard)  
+- Track attempts and solutions  
+- Learn patterns through structured problems  
 
-## 📡 API Endpoints
+---
 
-Authentication:
-POST /api/auth/register → Register user  
-POST /api/auth/login → Login and receive JWT token  
+### 🔄 Learning Loop (Core Feature)
+- Solve a problem  
+- Save the pattern/snippet  
+- Reuse it in future problems  
 
-WebSocket:
-/chat → Connection endpoint  
-/app/private → Send message  
-/user/queue/messages → Receive messages  
+---
 
-## 📁 Project Structure
+### 👥 Shared Knowledge (Friends Mode)
+- Share snippets with friends or groups  
+- View and reuse shared code  
+- Upvote or save useful patterns  
 
-chat-app/
-├── backend/
-│   ├── config/
-│   ├── controller/
-│   ├── security/
-│   ├── service/
-│   ├── websocket/
-│   ├── model/
-│   └── Application.java
-├── frontend/
-│   ├── index.html
-│   ├── app.js
-│   └── styles.css
-└── README.md
+---
+
+### 💰 Points & Unlock System (Optional)
+- Earn points by solving problems  
+- Unlock:
+  - Hints  
+  - Approaches  
+  - Solutions  
+
+---
+
+## 🏗️ Architecture
+
+Frontend (React)
+        ↓
+API Layer (JWT Auth)
+        ↓
+-----------------------------------
+| Code Vault Service              |
+| DSA Service                     |
+| Points Service                  |
+-----------------------------------
+        ↓
+Database (PostgreSQL)
+
+---
+
+## 🧰 Tech Stack
+
+### Backend:
+- C# (.NET) / Java (Spring Boot)  
+- REST APIs  
+- JWT Authentication  
+
+---
+
+### Frontend:
+- React.js  
+- JavaScript  
+- HTML / CSS  
+
+---
+
+### Database:
+- PostgreSQL  
+
+---
+
+### Deployment:
+- Frontend: Vercel  
+- Backend: Render  
+- Database: Supabase  
+
+---
+
+## 🔐 Security
+
+- JWT-based authentication  
+- Secure API endpoints  
+- User-based data isolation  
+- Protected snippet and problem access  
+
+---
 
 ## ⚙️ How It Works
 
-1. User registers or logs in via REST API  
-2. Server returns JWT token  
-3. Frontend connects to WebSocket using token  
-4. User sends message to another user  
-5. Backend validates and routes message securely  
-6. Receiver gets message instantly in real time  
+1. User logs in  
+2. Solves a DSA problem  
+3. Saves useful code/snippet  
+4. Tags and organizes it  
+5. Reuses it later or shares with friends  
 
-## ▶️ Setup Instructions
+---
 
-git clone https://github.com/your-username/valora.git  
-cd valora-chat  
-cd backend  
-mvn spring-boot:run  
+## 📁 Project Structure
 
-Backend runs at: http://localhost:8080  
+codesparrow/
+├── backend/
+│   ├── auth/
+│   ├── snippets/
+│   ├── dsa/
+│   ├── points/
+│   └── api/
+├── frontend/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+└── README.md
 
-Open frontend/index.html in browser.
+---
 
 ## 🧠 Learning Outcomes
 
-- WebSocket-based real-time systems  
-- Secure backend API design  
-- JWT authentication flow  
-- Message routing between users  
-- Full-stack system architecture  
-- Spring Boot backend development  
+- System design (modular architecture)  
+- JWT authentication implementation  
+- Database design for real-world apps  
+- Full-stack development  
+- API design and integration  
+
+---
 
 ## 🚧 Future Improvements
 
-- Group chat system  
-- Database persistence  
-- Online/offline status  
-- React frontend upgrade  
-- Push notifications  
-- Redis scaling  
+- AI-based code suggestions  
+- Advanced search (semantic search)  
+- Interview preparation mode  
+- Leaderboards and streaks  
+- Mobile app version  
 
-## 🤝 Contributing
+---
 
-Fork the repo, create a branch, make changes, and submit a pull request.
+## 🎯 Vision
 
-## 📜 License
+Build a system where developers don’t just solve problems—but **retain and reuse knowledge effectively**.
 
-Apache licence 2.0
+---
 
 ## 👨‍💻 Author
 
-Developed by Sachin Chaurasiya
-GitHub: https://github.com/Sachin-Chaurasiya12
+Developed by Sachin Chaurasiya  
+GitHub: https://github.com/Sachin-Chaurasiya12  
+
+---
+
+## 📜 License
+
+Apache License 2.0
