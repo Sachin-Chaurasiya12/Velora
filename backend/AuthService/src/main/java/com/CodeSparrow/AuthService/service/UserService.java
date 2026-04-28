@@ -57,25 +57,39 @@ public class UserService implements IUserService{
         
         ResponseDTO dto = new ResponseDTO();
         dto.setMessage("User Created Successfully");
-        dto.setName(user.getUsername());
         dto.setEmail(user.getEmail());
 
         return dto;
 
     }
     @Override
-    public String login(RequestDTO register) {
+    public ResponseDTO login(RequestDTO request) {
         Authentication authenticated = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                register.getEmail(), 
-                register.getPassword()
+                request.getEmail(), 
+                request.getPassword()
             )
         );
-        if(authenticated.isAuthenticated()){
-            return jwtService.generateToken(register.getEmail());
-        }else{
-            return "Login failed";
-        }
+         if (authenticated.isAuthenticated()) {
+
+        String accessToken = jwtService.generateToken(request.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(request.getEmail());
+
+        // OPTIONAL (recommended): store refresh token in DB
+        Users user = repo.findByEmail(request.getEmail()).orElseThrow();
+        user.setRefreshToken(refreshToken);
+        repo.save(user);
+
+        ResponseDTO response = new ResponseDTO();
+        response.setMessage("Login successful");
+        response.setEmail(request.getEmail());
+        response.setAccessToken(accessToken);
+        response.setRefreshToken(refreshToken);
+
+        return response;
+    }
+
+        throw new RuntimeException("Invalid credentials");
     }
     
 }

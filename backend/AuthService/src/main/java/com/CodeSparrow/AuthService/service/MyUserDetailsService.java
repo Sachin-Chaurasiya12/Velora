@@ -21,14 +21,15 @@ public class MyUserDetailsService implements UserDetailsService{
     private UserRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-            Users User = repository.findByUsername(username);
-            if(User == null){
+            Users user = repository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            if(user == null){
                 throw new RuntimeException("user not found");
             }
 
-        return new UsersPrinciple(User);
+        return new UsersPrinciple(user);
     }
     
 }

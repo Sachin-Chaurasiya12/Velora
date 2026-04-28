@@ -9,5 +9,5 @@ import com.CodeSparrow.AuthService.model.DTO.ResponseDTO;
 @Service
 public interface IUserService {
     public ResponseDTO Register(RegisterDTO register);
-    public String login(RequestDTO login);
+    public ResponseDTO login(RequestDTO login);
 }

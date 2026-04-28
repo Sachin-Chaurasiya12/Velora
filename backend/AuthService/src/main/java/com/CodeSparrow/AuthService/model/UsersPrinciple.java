@@ -1,6 +1,5 @@
 package com.CodeSparrow.AuthService.model;
 
-import java.nio.file.attribute.UserPrincipal;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -22,7 +21,7 @@ public class UsersPrinciple implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(Role.User + "_Role"));
+        return Collections.singleton(new SimpleGrantedAuthority("Role_" + user.getRole().name()));
     }
 
     @Override

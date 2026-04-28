@@ -35,6 +35,8 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
     private LocalDate CreatedAt;
+    private String refreshToken;
+
 
     // Constructors
     public Users() {}
@@ -99,5 +101,11 @@ public class Users {
     }
     public void setCreatedAt(LocalDate createdAt) {
         CreatedAt = createdAt;
+    }
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }   
