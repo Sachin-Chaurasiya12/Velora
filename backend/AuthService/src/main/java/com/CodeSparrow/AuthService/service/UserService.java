@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import com.CodeSparrow.AuthService.Exception.UserAlreadyExistException;
 import com.CodeSparrow.AuthService.model.Role;
 import com.CodeSparrow.AuthService.model.Users;
 import com.CodeSparrow.AuthService.model.DTO.RegisterDTO;
+import com.CodeSparrow.AuthService.model.DTO.RequestDTO;
 import com.CodeSparrow.AuthService.model.DTO.ResponseDTO;
 import com.CodeSparrow.AuthService.repository.UserRepository;
 import com.CodeSparrow.AuthService.service.interfaces.IUserService;
@@ -23,6 +27,12 @@ public class UserService implements IUserService{
     private UserRepository repo;
     @Autowired
     private PasswordEncoder encoder;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Override
     public ResponseDTO Register(RegisterDTO register) {
@@ -54,9 +64,18 @@ public class UserService implements IUserService{
 
     }
     @Override
-    public String login(RegisterDTO register) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'login'");
+    public String login(RequestDTO register) {
+        Authentication authenticated = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                register.getEmail(), 
+                register.getPassword()
+            )
+        );
+        if(authenticated.isAuthenticated()){
+            return jwtService.generateToken(register.getEmail());
+        }else{
+            return "Login failed";
+        }
     }
     
 }
