@@ -4,36 +4,80 @@ import { Link } from "react-router-dom";
 
 function Register() {
   const [formData, setFormData] = useState({
+    username: "",
     fullName: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({ message: "", type: "" });
 
+const showAlert = (msg, type) => {
+  setAlert({ message: msg, type });
+
+  setTimeout(() => {
+    setAlert({ message: "", type: "" });
+  }, 3000);
+};
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const [errors, setErrors] = useState({});
 
-  const handleRegister = () => {
-    const { fullName, email, password, confirmPassword } = formData;
 
-    if (!fullName || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields");
-      return;
-    }
+  const handleRegister = async () => {
+  const { username, fullName, email, password, confirmPassword } = formData;
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
+  let newErrors = {};
 
+  if (!username) newErrors.username = "Username is required";
+  if (!fullName) newErrors.fullName = "Full name is required";
+  if (!email) newErrors.email = "Email is required";
+  if (!password) newErrors.password = "Password is required";
+  if (!confirmPassword) newErrors.confirmPassword = "Please confirm your password";
+
+  if (password && confirmPassword && password !== confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    showAlert("Please fix the errors below", "error");
+    return;
+  }
+
+  try{
     setLoading(true);
-    setTimeout(() => {
-      alert("Account created successfully! Welcome to Velora 🚀");
-      setLoading(false);
-    }, 1500);
-  };
+     
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+          username,
+          name:fullName,
+          email,
+          password
+      })
+    });
+    const data = await res.json();
+
+    if(!res.ok){
+        showAlert(data.message || "Registration failed", "error");
+        return;
+    }
+
+    showAlert("Account created successfully!", "success");
+  }catch (err){
+    showAlert("Server error. Please try again later.", "error");
+  }finally{
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <>
@@ -147,13 +191,66 @@ function Register() {
   pointer-events: none;
   overflow: hidden;
 }
+/* ❌ Error state */
+.errorInput {
+  border-color: #ef4444 !important;
+  background: #fef2f2;
+}
+
+/* ✨ Hover effect on wrong input */
+.errorInput:hover {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Optional: focus state */
+.errorInput:focus {
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
+}
+  .errorText {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+.errorInput {
+  border-color: #ef4444 !important;
+  background: #fef2f2;
+}
+
+.errorInput:hover {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+  .alert {
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.alert.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
 
 
         @media (max-width: 850px) {
           .right { display: none; }
           .auth-card { max-width: 450px; height: auto; }
         }
-      `}</style>
+      `}
+  </style>
     <div className="bg-blobs">
   <div className="blob b1"></div>
   <div className="blob b2"></div>
@@ -168,21 +265,32 @@ function Register() {
             <h2>Create Account</h2>
             <div className="sub">Join us and start your journey today.</div>
 
+          {alert.message && (
+          <div className={`alert ${alert.type}`}>
+            {alert.message}
+          </div>
+          )}
+
             <input 
-              type="text" 
-              name="fullName"
-              placeholder="UserName" 
-              value={formData.fullName} 
-              onChange={handleChange} 
-            />
-            
-            <input 
-              type="text" 
-              name="fullName"
-              placeholder="Name" 
-              value={formData.fullName} 
-              onChange={handleChange} 
-            />
+            type="text" 
+            name="username"
+            placeholder="Username" 
+            value={formData.username} 
+            onChange={handleChange} 
+            className={errors.username ? "errorInput" : ""}
+          />
+          {errors.username && <div className="errorText">{errors.username}</div>}
+
+          <input 
+            type="text" 
+            name="fullName"
+            placeholder="Full Name" 
+            value={formData.fullName} 
+            onChange={handleChange} 
+            className={errors.fullName ? "errorInput" : ""}
+          />
+          {errors.fullName && <div className="errorText">{errors.fullName}</div>}
+
 
             <input 
               type="email" 
@@ -190,7 +298,9 @@ function Register() {
               placeholder="Email Address" 
               value={formData.email} 
               onChange={handleChange} 
+              className={errors.email ? "errorInput" : ""}
             />
+            {errors.email && <div className="errorText">{errors.email}</div>}
             
             <input 
               type="password" 
@@ -198,7 +308,9 @@ function Register() {
               placeholder="Create Password" 
               value={formData.password} 
               onChange={handleChange} 
+              className={errors.password ? "errorInput" : ""}
             />
+            {errors.password && <div className="errorText">{errors.password}</div>}
 
             <input 
               type="password" 
@@ -206,7 +318,9 @@ function Register() {
               placeholder="Confirm Password" 
               value={formData.confirmPassword} 
               onChange={handleChange} 
+              className={errors.confirmPassword ? "errorInput" : ""}
             />
+            {errors.confirmPassword && <div className="errorText">{errors.confirmPassword}</div>}
             
             <button onClick={handleRegister} disabled={loading}>
               {loading ? "Creating Account..." : "Sign Up"}

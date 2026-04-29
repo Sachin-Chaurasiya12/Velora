@@ -7,42 +7,69 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [alert, setAlert] = useState({ message: "", type: "" });
+  const [errors, setErrors] = useState({});
+
+  const showAlert = (msg, type) => {
+    setAlert({ message: msg, type });
+
+    setTimeout(() => {
+      setAlert({ message: "", type: "" });
+    }, 3000);
+  };
+
   const handleLogin = () => {
-    if (!email || !password) {
-      alert("Please fill all fields");
+  let newErrors = {};
+
+  if (!email) newErrors.email = "Email is required";
+  if (!password) newErrors.password = "Password is required";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    showAlert("Please fix the errors below", "error");
+    return;
+  }
+
+  setErrors({});
+  setLoading(true);
+
+  setTimeout(() => {
+    // 🔐 Fake credential check (replace with backend later)
+    if (email !== "test@gmail.com" || password !== "123456") {
+      showAlert("Invalid email or password", "error");
+
+      // highlight both fields
+      setErrors({
+        email: "Invalid email",
+        password: "Incorrect password"
+      });
+
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
+    // ✅ Success
+    showAlert("Login successful 🚀", "success");
+    setLoading(false);
 
-    setTimeout(() => {
-      alert("Login successful 🚀");
-      setLoading(false);
-    }, 1200);
-  };
+  }, 1200);
+};
+
 
   return (
     <>
       <style>{`
         html, body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        font-family: 'Inter', system-ui, sans-serif;
-
-        background: radial-gradient(circle at top left, #f8f8f8, #9de9bb);
-        }
-          
-
-        #root {
-          width: 100%;
+          margin: 0;
+          padding: 0;
+          min-height: 100vh;
+          font-family: 'Inter', system-ui, sans-serif;
+          background: radial-gradient(circle at top left, #f8f8f8, #9de9bb);
         }
 
-        * {
-          box-sizing: border-box;
-        }
+        #root { width: 100%; }
+        * { box-sizing: border-box; }
 
-        /* WRAPPER */
         .auth-wrapper {
           width: 100%;
           min-height: 100vh;
@@ -52,7 +79,6 @@ function Login() {
           padding: 20px;
         }
 
-        /* CARD */
         .auth-card {
           width: 100%;
           max-width: 1000px;
@@ -60,11 +86,10 @@ function Login() {
           display: flex;
           border-radius: 24px;
           overflow: hidden;
-          box-shadow: 0 25px 50px -12px rgba(19, 17, 17, 0.15);
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
           background: white;
         }
 
-        /* LEFT */
         .left {
           flex: 1;
           padding: 60px;
@@ -79,36 +104,48 @@ function Login() {
           margin-bottom: 30px;
           color: #6366f1;
           text-transform: uppercase;
-          letter-spacing: 1px;
         }
 
         h2 {
           font-size: 32px;
-          font-weight: 700;
-          margin: 0 0 8px 0;
-          color: #1a1a1a;
+          margin-bottom: 8px;
         }
 
         .sub {
           font-size: 15px;
           color: #666;
-          margin-bottom: 30px;
+          margin-bottom: 25px;
         }
 
         input {
           width: 100%;
-          padding: 14px 16px;
-          margin-bottom: 16px;
+          padding: 14px;
+          margin-bottom: 12px;
           border-radius: 12px;
           border: 1px solid #e2e8f0;
           background: #f8fafc;
-          outline: none;
-          font-size: 14px;
         }
 
         input:focus {
           border-color: #6366f1;
           background: #fff;
+        }
+
+        .errorInput {
+          border-color: #ef4444 !important;
+          background: #fef2f2;
+        }
+
+        .errorInput:hover {
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        .errorText {
+          color: #dc2626;
+          font-size: 12px;
+          margin-top: -8px;
+          margin-bottom: 10px;
+          padding-left: 4px;
         }
 
         button {
@@ -119,13 +156,7 @@ function Login() {
           background: #111827;
           color: white;
           font-weight: 600;
-          font-size: 16px;
           cursor: pointer;
-          transition: 0.2s;
-        }
-
-        button:hover {
-          background: #000;
         }
 
         button:disabled {
@@ -134,180 +165,98 @@ function Login() {
         }
 
         .small {
-          margin-top: 25px;
-          font-size: 14px;
+          margin-top: 20px;
           text-align: center;
-          color: #666;
+          font-size: 14px;
         }
 
         .small a {
           color: #6366f1;
-          text-decoration: none;
           font-weight: 600;
         }
 
-        /* RIGHT */
         .right {
           flex: 1.1;
-          position: relative;
           background-image: url(${bg});
           background-size: cover;
           background-position: center;
         }
 
-        .quote {
-          position: absolute;
-          bottom: 30px;
-          left: 30px;
-          right: 30px;
-          background: rgba(255, 255, 255, 0.8);
-          padding: 24px;
-          border-radius: 20px;
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.3);
+        .alert {
+          padding: 12px;
+          border-radius: 10px;
+          margin-bottom: 12px;
+          font-size: 14px;
         }
-          .bg-blobs {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
 
-.blob {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.4;
-}
+        .alert.error {
+          background: #fee2e2;
+          color: #991b1b;
+        }
 
-.b1 {
-  background: #6366f1;
-  top: -100px;
-  left: -100px;
-}
+        .alert.success {
+          background: #dcfce7;
+          color: #166534;
+        }
 
-.b2 {
-  background: #22c55e;
-  bottom: -120px;
-  right: -120px;
-}
-
-.b3 {
-  background: #ec4899;
-  top: 40%;
-  left: 50%;
-}
-.bg-blobs {
-  position: fixed;
-  inset: 0;
-  z-index: -1;   /* 👈 push fully behind page */
-  pointer-events: none;
-  overflow: hidden;
-}
-
-
-
-
-        /* RESPONSIVE */
         @media (max-width: 850px) {
-          .right {
-            display: none;
-          }
-
-          .auth-card {
-            max-width: 450px;
-            height: auto;
-          }
+          .right { display: none; }
+          .auth-card { max-width: 450px; height: auto; }
         }
       `}</style>
-    <div className="bg-blobs">
-  <div className="blob b1"></div>
-  <div className="blob b2"></div>
-  <div className="blob b3"></div>
-</div>
 
       <div className="auth-wrapper">
         <div className="auth-card">
 
-          {/* LEFT */}
           <div className="left">
             <div className="brand">Velora</div>
 
             <h2>Welcome Back!</h2>
             <div className="sub">Let’s get you signed in securely.</div>
 
+            {/* ALERT */}
+            {alert.message && (
+              <div className={`alert ${alert.type}`}>
+                {alert.message}
+              </div>
+            )}
+
+            {/* EMAIL */}
             <input
               type="email"
               placeholder="Email Address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors(prev => ({ ...prev, email: "" }));
+              }}
+              className={errors.email ? "errorInput" : ""}
             />
+            {errors.email && <div className="errorText">{errors.email}</div>}
 
+            {/* PASSWORD */}
             <input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrors(prev => ({ ...prev, password: "" }));
+              }}
+              className={errors.password ? "errorInput" : ""}
             />
+            {errors.password && <div className="errorText">{errors.password}</div>}
 
             <button onClick={handleLogin} disabled={loading}>
               {loading ? "Signing in..." : "Log In"}
             </button>
-
-            <button
-            onClick={() => (window.location.href = "/auth/google")}
-            style={{
-              marginTop: "12px",
-              background: "#fff",
-              color: "#111827",
-              border: "1px solid #e5e7eb",
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 48 48">
-              <path
-                fill="#EA4335"
-                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.9-6.9C35.9 2.34 30.4 0 24 0 14.62 0 6.51 5.38 2.56 13.22l8.06 6.26C12.6 13.08 17.88 9.5 24 9.5z"
-              />
-              <path
-                fill="#4285F4"
-                d="M46.5 24.5c0-1.64-.15-3.21-.43-4.72H24v9.02h12.6c-.54 2.9-2.18 5.37-4.64 7.03l7.19 5.58C43.98 37.04 46.5 31.32 46.5 24.5z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M10.62 28.48a14.5 14.5 0 010-8.96L2.56 13.22A24 24 0 000 24c0 3.84.9 7.46 2.56 10.78l8.06-6.3z"
-              />
-              <path
-                fill="#34A853"
-                d="M24 48c6.48 0 11.93-2.13 15.9-5.8l-7.19-5.58c-2.01 1.35-4.6 2.16-8.71 2.16-6.12 0-11.4-3.58-13.38-8.82l-8.06 6.3C6.51 42.62 14.62 48 24 48z"
-              />
-            </svg>
-
-            Continue with Google
-          </button>
-
-
 
             <div className="small">
               Don’t have an account? <Link to="/register">Sign Up</Link>
             </div>
           </div>
 
-          {/* RIGHT */}
-          <div className="right">
-            {/* <div className="quote">
-              <b>John Muir</b>
-              <div>
-                “Explore untouched landscapes, breathtaking trails, and hidden wonders of nature.”
-              </div>
-            </div> */}
-          </div>
+          <div className="right"></div>
 
         </div>
       </div>

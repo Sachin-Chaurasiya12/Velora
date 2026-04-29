@@ -1,0 +1,11 @@
+{
+  "name": "velora-chat",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix velora-core\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
