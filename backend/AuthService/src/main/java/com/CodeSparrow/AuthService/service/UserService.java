@@ -84,7 +84,6 @@ public class UserService implements IUserService{
         response.setMessage("Login successful");
         response.setEmail(request.getEmail());
         response.setAccessToken(accessToken);
-        response.setRefreshToken(refreshToken);
 
         return response;
     }
