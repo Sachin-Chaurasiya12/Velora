@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import bg from "./assets/loginimage.webp";
 
 function Login() {
@@ -17,8 +18,8 @@ function Login() {
       setAlert({ message: "", type: "" });
     }, 3000);
   };
-
-  const handleLogin = () => {
+  const navigate = useNavigate();
+  const handleLogin = async () => {
   let newErrors = {};
 
   if (!email) newErrors.email = "Email is required";
@@ -33,26 +34,39 @@ function Login() {
   setErrors({});
   setLoading(true);
 
-  setTimeout(() => {
-    // 🔐 Fake credential check (replace with backend later)
-    if (email !== "test@gmail.com" || password !== "123456") {
-      showAlert("Invalid email or password", "error");
+  try{
+  const res = await fetch("/api/auth/login", {
+    method: "POST",
+    headers: {
+          "Content-Type": "application/json"
 
-      // highlight both fields
-      setErrors({
-        email: "Invalid email",
-        password: "Incorrect password"
-      });
+    },
+    body: JSON.stringify({ email, password })
 
-      setLoading(false);
-      return;
-    }
+  })
+  if(!res.ok){
+      throw new Error("Login failed");
+  }
 
-    // ✅ Success
-    showAlert("Login successful 🚀", "success");
-    setLoading(false);
+  const data = await res.json();
 
-  }, 1200);
+  localStorage.setItem("accessToken",data.accessToken);
+  localStorage.setItem("refreshToken",data.refreshToken);
+
+  showAlert(data.message || "Login successful", "success");
+
+  navigate("/dashboard");
+}catch(err){
+  showAlert("Invalid email or password","error");
+
+  setErrors({
+      email: "Check email",
+      password: "Check password",
+    });
+}finally{
+  setLoading(false);
+}
+
 };
 
 

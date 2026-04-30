@@ -63,32 +63,32 @@ public class UserService implements IUserService{
 
     }
     @Override
-    public ResponseDTO login(RequestDTO request) {
-        Authentication authenticated = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                request.getEmail(), 
-                request.getPassword()
-            )
-        );
-         if (authenticated.isAuthenticated()) {
+public ResponseDTO login(RequestDTO request) {
 
-        String accessToken = jwtService.generateToken(request.getEmail());
-        String refreshToken = jwtService.generateRefreshToken(request.getEmail());
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            request.getEmail(),
+            request.getPassword()
+        )
+    );
 
-        // OPTIONAL (recommended): store refresh token in DB
-        Users user = repo.findByEmail(request.getEmail()).orElseThrow();
-        user.setRefreshToken(refreshToken);
-        repo.save(user);
+    String accessToken = jwtService.generateToken(request.getEmail());
+    String refreshToken = jwtService.generateRefreshToken(request.getEmail());
 
-        ResponseDTO response = new ResponseDTO();
-        response.setMessage("Login successful");
-        response.setEmail(request.getEmail());
-        response.setAccessToken(accessToken);
+    Users user = repo.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return response;
-    }
+    user.setRefreshToken(refreshToken);
+    repo.save(user);
 
-        throw new RuntimeException("Invalid credentials");
-    }
+    ResponseDTO response = new ResponseDTO();
+    response.setMessage("Login successful");
+    response.setEmail(request.getEmail());
+    response.setAccessToken(accessToken);
+    response.setRefreshToken(refreshToken); // 🔥 FIXED
+
+    return response;
+}
+
     
 }

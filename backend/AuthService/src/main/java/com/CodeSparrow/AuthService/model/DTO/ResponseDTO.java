@@ -4,6 +4,7 @@ public class ResponseDTO {
     private String message;
     private String email;
     private String accessToken;
+    private String refreshToken;
 
     public String getEmail() {
         return email;
@@ -21,5 +22,10 @@ public class ResponseDTO {
     }
     public String getAccessToken() {
         return accessToken;
+    }
+    public String getRefreshToken() {
+        return refreshToken;
+    }public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
