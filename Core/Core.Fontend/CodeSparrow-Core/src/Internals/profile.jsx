@@ -1,0 +1,218 @@
+import React from "react";
+
+export default function ProfilePage() {
+  return (
+    <>
+      <style>{`
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: #f5f7fb;
+        }
+
+        .header {
+          height: 180px;
+          background: linear-gradient(135deg, #4c6ef5, #3b5bdb);
+        }
+
+        .container {
+          max-width: 1000px;
+          margin: -80px auto 40px;
+          display: flex;
+          gap: 20px;
+          padding: 0 20px;
+        }
+
+        .profile-card {
+          width: 280px;
+          background: white;
+          border-radius: 12px;
+          padding: 20px;
+          text-align: center;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .avatar {
+          width: 100px;
+          border-radius: 50%;
+          margin-top: -60px;
+          border: 5px solid white;
+        }
+
+        .profile-card h3 {
+          margin: 10px 0 5px;
+        }
+
+        .profile-card p {
+          color: gray;
+          font-size: 14px;
+        }
+
+        .stats {
+          margin-top: 20px;
+          text-align: left;
+        }
+
+        .stats div {
+          display: flex;
+          justify-content: space-between;
+          margin: 8px 0;
+          font-size: 14px;
+        }
+
+        .outline-btn {
+          margin-top: 15px;
+          padding: 8px;
+          width: 100%;
+          border: 1px solid #ddd;
+          background: white;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+
+        .primary-btn {
+          margin-top: 20px;
+          padding: 10px 20px;
+          background: #3b5bdb;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+
+        .content {
+          flex: 1;
+          background: white;
+          border-radius: 12px;
+          padding: 20px;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .tabs {
+          display: flex;
+          gap: 20px;
+          border-bottom: 1px solid #ddd;
+          margin-bottom: 20px;
+        }
+
+        .tabs div {
+          padding-bottom: 10px;
+          cursor: pointer;
+          color: gray;
+        }
+
+        .tabs .active {
+          color: #3b5bdb;
+          border-bottom: 2px solid #3b5bdb;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+        }
+
+        label {
+          font-size: 13px;
+          color: gray;
+        }
+
+        input, select {
+          width: 100%;
+          padding: 8px;
+          margin-top: 5px;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+          .container {
+            flex-direction: column;
+          }
+
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+
+      <div className="header" />
+
+      <div className="container">
+        {/* Profile Card */}
+        <div className="profile-card">
+          <img
+            src="https://i.pravatar.cc/150"
+            alt="avatar"
+            className="avatar"
+          />
+          <h3>Nathaniel Poole</h3>
+          <p>Microsoft Inc.</p>
+
+          <div className="stats">
+            <div><span>Opportunities applied</span><b>32</b></div>
+            <div><span>Opportunities won</span><b>26</b></div>
+            <div><span>Current opportunities</span><b>6</b></div>
+          </div>
+
+          <button className="outline-btn">View Public Profile</button>
+        </div>
+
+        {/* Content */}
+        <div className="content">
+          <div className="tabs">
+            <div className="active">Account Settings</div>
+          </div>
+
+          <form className="form-grid">
+            <div>
+              <label>First Name</label>
+              <input defaultValue="Nathaniel" />
+            </div>
+
+            <div>
+              <label>Last Name</label>
+              <input defaultValue="Poole" />
+            </div>
+
+            <div>
+              <label>Phone Number</label>
+              <input defaultValue="+1800-000" />
+            </div>
+
+            <div>
+              <label>Email Address</label>
+              <input defaultValue="nathaniel.poole@microsoft.com" />
+            </div>
+
+            <div>
+              <label>City</label>
+              <input defaultValue="Bridgeport" />
+            </div>
+
+            <div>
+              <label>State/County</label>
+              <input defaultValue="WA" />
+            </div>
+
+            <div>
+              <label>Postcode</label>
+              <input defaultValue="31005" />
+            </div>
+
+            <div>
+              <label>Country</label>
+              <select defaultValue="USA">
+                <option>USA</option>
+                <option>UK</option>
+                <option>Canada</option>
+              </select>
+            </div>
+          </form>
+
+          <button className="primary-btn">Update</button>
+        </div>
+      </div>
+    </>
+  );
+}

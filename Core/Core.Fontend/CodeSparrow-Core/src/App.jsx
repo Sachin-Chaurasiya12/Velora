@@ -3,6 +3,8 @@ import Login from "./Login";
 import Register from "./RegisterPageLayout";
 import Dashboard from "./Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Profile from "./Internals/profile";
+import MainLayout from "./Layout/Layout";
 
 function App() {
   return (
@@ -13,6 +15,14 @@ function App() {
       <Route path="/register" element={<Register />} />
 
       {/* protected routes */}
+      <Route/>
+      <Route
+        element={
+          <ProtectedRoute>
+            <MainLayout />
+          </ProtectedRoute>
+        }
+      >
       <Route
         path="/dashboard"
         element={
@@ -21,7 +31,15 @@ function App() {
           </ProtectedRoute>
         }
       />
-
+      <Route 
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      </Route>
       {/* default */}
       <Route path="/" element={<Navigate to="/login" />} />
 
