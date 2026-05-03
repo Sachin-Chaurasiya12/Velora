@@ -166,12 +166,12 @@ export default function ProfilePage() {
 
           <form className="form-grid">
             <div>
-              <label>First Name</label>
+              <label>Username</label>
               <input defaultValue="Nathaniel" />
             </div>
 
             <div>
-              <label>Last Name</label>
+              <label>Name</label>
               <input defaultValue="Poole" />
             </div>
 

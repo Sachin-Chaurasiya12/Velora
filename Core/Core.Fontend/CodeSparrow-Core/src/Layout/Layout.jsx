@@ -1,23 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import logo from "./assets/brand.png";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function LayoutShell() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [active, setActive] = useState("Dashboard");
   const [notifOpen, setNotifOpen] = useState(false);
   const notifRef = useRef(null);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (notifRef.current && !notifRef.current.contains(e.target)) {
-        setNotifOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
     { label: "Dashboard", icon: "⚡", section: "Main", path: "/dashboard" },
@@ -30,38 +22,75 @@ export default function LayoutShell() {
   ];
 
   const sections = [...new Set(navItems.map((n) => n.section))];
+  const activePath = location.pathname;
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setNotifOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
     <div style={styles.wrapper}>
 
       {/* TOPBAR */}
       <header style={styles.topbar}>
-        <button
-          onClick={() => setSidebarOpen(v => !v)}
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setSidebarOpen((v) => !v)}
           style={styles.toggleBtn}
         >
           ☰
-        </button>
+        </motion.button>
 
         <div style={styles.brandContainer}>
           <img src={logo} style={styles.logo} />
           <span style={styles.brand}>CodeSparrow</span>
         </div>
 
-        <input placeholder="Search..." style={styles.search} />
+        <motion.input
+          whileFocus={{ scale: 1.02 }}
+          placeholder="Search..."
+          style={styles.search}
+        />
 
-        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 12 }}>
+
+          {/* Notifications */}
           <div ref={notifRef} style={{ position: "relative" }}>
-            🔔
-            {notifOpen && <div style={styles.notifPanel}>Notifications</div>}
+            <motion.div
+              whileTap={{ scale: 0.9 }}
+              style={styles.iconBtn}
+              onClick={() => setNotifOpen((v) => !v)}
+            >
+              🔔
+            </motion.div>
+
+            <AnimatePresence>
+              {notifOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  style={styles.notifPanel}
+                >
+                  <p>No new notifications</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          <div
-            onClick={() => navigate("/profile")}
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            onClick={() => navigate("/internal/profile")}
             style={styles.avatar}
           >
             U
-          </div>
+          </motion.div>
         </div>
       </header>
 
@@ -69,52 +98,70 @@ export default function LayoutShell() {
       <div style={styles.body}>
 
         {/* SIDEBAR */}
-        <aside style={{
-          ...styles.sidebar,
-          width: sidebarOpen ? 220 : 70,
-        }}>
-          {sections.map(section => (
+        <motion.aside
+          animate={{ width: sidebarOpen ? 220 : 72 }}
+          transition={{ duration: 0.25 }}
+          style={styles.sidebar}
+        >
+          {sections.map((section) => (
             <div key={section}>
-
               {sidebarOpen && (
                 <div style={styles.sidebarSection}>{section}</div>
               )}
 
               {navItems
-                .filter(i => i.section === section)
-                .map(item => (
-                  <div
-                    key={item.label}
-                    onClick={() => {
-                      setActive(item.label);
-                      navigate(item.path);
-                    }}
-                    style={{
-                      ...styles.navItem,
-                      justifyContent: sidebarOpen ? "flex-start" : "center",
-                      background:
-                        active === item.label ? "#EEEDFE" : "transparent",
-                      color:
-                        active === item.label ? "#534AB7" : "#5F5E5A",
-                    }}
-                  >
-                    <span>{item.icon}</span>
-                    {sidebarOpen && <span>{item.label}</span>}
-                  </div>
-                ))}
+                .filter((i) => i.section === section)
+                .map((item) => {
+                  const active = activePath === item.path;
+
+                  return (
+                    <motion.div
+                      key={item.label}
+                      onClick={() => navigate(item.path)}
+                      whileHover={{
+                        scale: 1.03,
+                        x: 3,
+                        backgroundColor: active ? "#EEEDFE" : "#F3F4FF",
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        ...styles.navItem,
+                        justifyContent: sidebarOpen ? "flex-start" : "center",
+                        background: active ? "#EEEDFE" : "transparent",
+                        color: active ? "#534AB7" : "#5F5E5A",
+                      }}
+                    >
+                      <span>{item.icon}</span>
+
+                      <AnimatePresence>
+                        {sidebarOpen && (
+                          <motion.span
+                            initial={{ opacity: 0, x: -5 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -5 }}
+                          >
+                            {item.label}
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })}
             </div>
           ))}
-        </aside>
+        </motion.aside>
 
         {/* MAIN */}
         <main style={styles.main}>
           <Outlet />
         </main>
-
       </div>
     </div>
   );
 }
+
+/* ─── STYLES ─── */
+
 const styles = {
   wrapper: {
     height: "100vh",
@@ -124,24 +171,22 @@ const styles = {
     background: "#f4f6fb",
   },
 
-  /* TOPBAR */
   topbar: {
-    height: 52,
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-    padding: "0 16px",
-    background: "white",
-    borderBottom: "0.5px solid rgba(0,0,0,0.09)",
-    flexShrink: 0,
-    zIndex: 100,
-  },
+  height: 64,
+  display: "flex",
+  alignItems: "center",
+  gap: 10, // slightly tighter
+  padding: "0 16px",
+  background: "white",
+  borderBottom: "1px solid rgba(0,0,0,0.06)",
+},
+
 
   toggleBtn: {
-    width: 32,
-    height: 32,
+    width: 34,
+    height: 34,
     borderRadius: 8,
-    border: "0.5px solid rgba(0,0,0,0.1)",
+    border: "1px solid rgba(0,0,0,0.1)",
     background: "white",
     cursor: "pointer",
   },
@@ -149,26 +194,44 @@ const styles = {
   brandContainer: {
     display: "flex",
     alignItems: "center",
-    gap: 6,
+    gap: 4,
   },
 
-  logo: { width: 32, height: 32, objectFit: "contain" },
+  logo: { width: 38, height: 38 },
+  brand: { fontWeight: 600, color: "#534AB7" ,gap:-2},
 
-  brand: { fontWeight: 500, color: "#534AB7" },
+search: {
+  flex: 1,
+  maxWidth: 320,
+  height: 36,
+  borderRadius: 10,
+  border: "1px solid rgba(0,0,0,0.1)",
+  padding: "0 12px",
+  background: "#F1EFE8",
+  marginLeft: 8,
+  marginRight: 8,
+},
 
-  search: {
-    flex: 1,
-    maxWidth: 300,
-    height: 32,
-    borderRadius: 8,
-    border: "0.5px solid rgba(0,0,0,0.1)",
-    padding: "0 10px",
-    background: "#F1EFE8",
-  },
+
+iconBtn: {
+  width: 30,
+  height: 30,
+  borderRadius: 12,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  background: "#f5f5f5",
+  fontSize: 18,
+  lineHeight: 1,
+  userSelect: "none",
+},
+
+
 
   avatar: {
-    width: 28,
-    height: 28,
+    width: 32,
+    height: 32,
     borderRadius: "50%",
     background: "#534AB7",
     color: "white",
@@ -180,35 +243,32 @@ const styles = {
 
   notifPanel: {
     position: "absolute",
-    top: 35,
+    top: 40,
     right: 0,
-    width: 200,
+    width: 220,
     background: "white",
-    border: "0.5px solid rgba(0,0,0,0.1)",
-    borderRadius: 10,
-    padding: 10,
+    border: "1px solid rgba(0,0,0,0.08)",
+    borderRadius: 12,
+    padding: 12,
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
 
-  /* BODY */
   body: {
     display: "flex",
     flex: 1,
     overflow: "hidden",
   },
 
-  /* SIDEBAR */
   sidebar: {
     background: "white",
-    borderRight: "0.5px solid rgba(0,0,0,0.09)",
-    transition: "width 0.25s ease",
+    borderRight: "1px solid rgba(0,0,0,0.06)",
     overflow: "hidden",
-    flexShrink: 0,
   },
 
   sidebarSection: {
     fontSize: 10,
     textTransform: "uppercase",
-    color: "#B4B2A9",
+    color: "#A1A1A1",
     padding: "10px",
   },
 
@@ -216,16 +276,17 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: 10,
-    padding: "8px 10px",
+    padding: "10px",
     cursor: "pointer",
     fontSize: 13,
-    borderRadius: 8,
+    borderRadius: 10,
+    margin: "4px 6px",
+    transition: "all 0.2s ease",
   },
 
-  /* MAIN */
   main: {
     flex: 1,
     overflowY: "auto",
-    padding: 18,
+    padding: 20,
   },
 };

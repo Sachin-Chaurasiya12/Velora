@@ -32,7 +32,7 @@ function App() {
         }
       />
       <Route 
-        path="/profile"
+        path="/internal/profile"
         element={
           <ProtectedRoute>
             <Profile />

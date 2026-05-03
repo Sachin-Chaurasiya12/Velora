@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 
 /* ─── ANIMATED COUNTER HOOK ─── */
 function useCountUp(target, duration = 1000, delay = 200) {
@@ -31,28 +30,24 @@ function useCountUp(target, duration = 1000, delay = 200) {
 
 /* ─── COMPONENTS ─── */
 
+function SectionTitle({ children }) {
+  return <div style={styles.sectionTitle}>{children}</div>;
+}
+
 function StatCard({ icon, label, value, suffix = "", badge, badgeColor, delay = 0 }) {
   const count = useCountUp(typeof value === "number" ? value : 0, 900, 200 + delay);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: delay / 1000, duration: 0.4 }}
-      whileHover={{ scale: 1.03 }}
-      style={styles.statCard}
-    >
-      <div style={styles.statLabel}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span>{icon}</span>
-          {label}
-        </div>
-
+    <div style={styles.statCard}>
+      <div style={styles.statLabelRow}>
+        <span>{icon}</span>
+        <span>{label}</span>
         {badge && (
           <span
             style={{
               ...styles.badge,
               ...(badgeColor === "green" ? styles.badgeGreen : styles.badgePurple),
+              marginLeft: "auto",
             }}
           >
             {badge}
@@ -64,7 +59,7 @@ function StatCard({ icon, label, value, suffix = "", badge, badgeColor, delay = 
         {typeof value === "number" ? count.toLocaleString() : value}
         {suffix && <span style={styles.suffix}>{suffix}</span>}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -72,73 +67,115 @@ function ProgressBar({ pct, color }) {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    const t = setTimeout(() => setWidth(pct), 120);
+    const t = setTimeout(() => setWidth(pct), 300);
     return () => clearTimeout(t);
   }, [pct]);
 
   return (
     <div style={styles.progressTrack}>
-      <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: `${width}%` }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        style={{ ...styles.progressFill, background: color }}
-      />
+      <div style={{ ...styles.progressFill, width: `${width}%`, background: color }} />
     </div>
   );
 }
 
-function ChallengeCard(props) {
+function ChallengeCard({ icon, iconBg, title, sub, desc, pct, barColor, tag, tagStyle }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.35 }}
-      style={styles.challengeCard}
-    >
+    <div style={styles.challengeCard}>
       <div style={styles.cardTop}>
-        <div style={{ ...styles.cardIcon, background: props.iconBg }}>{props.icon}</div>
+        <div style={{ ...styles.cardIcon, background: iconBg }}>{icon}</div>
+
         <div>
-          <div style={styles.cardTitle}>{props.title}</div>
-          <div style={styles.cardSub}>{props.sub}</div>
+          <div style={styles.cardTitle}>{title}</div>
+          <div style={styles.cardSub}>{sub}</div>
         </div>
-        <span style={{ ...styles.tag, ...props.tagStyle }}>{props.tag}</span>
+
+        <span style={{ ...styles.tagBase, ...tagStyle, marginLeft: "auto" }}>{tag}</span>
       </div>
 
-      <div style={styles.cardDesc}>{props.desc}</div>
+      <div style={styles.cardDesc}>{desc}</div>
 
-      <ProgressBar pct={props.pct} color={props.barColor} />
+      <ProgressBar pct={pct} color={barColor} />
 
       <div style={styles.progLabel}>
         <span>Progress</span>
-        <span>{props.pct}%</span>
+        <span>{pct}%</span>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 /* ─── MAIN DASHBOARD ─── */
 
 export default function Dashboard() {
-  const challenges = [/* same as before */];
+  const challenges = [
+    {
+      icon: "⚔️",
+      iconBg: "#EEEDFE",
+      title: "Daily Challenge",
+      sub: "Updated 2h ago",
+      desc: "Two Sum Variants — explore hashing strategies",
+      pct: 70,
+      barColor: "#7F77DD",
+      tag: "Medium",
+      tagStyle: styles.tagMed,
+    },
+    {
+      icon: "🔥",
+      iconBg: "#FAECE7",
+      title: "DSA Arena",
+      sub: "12 participants",
+      desc: "Live competition — Segment Trees",
+      pct: 40,
+      barColor: "#D85A30",
+      tag: "Hard",
+      tagStyle: styles.tagHard,
+    },
+    {
+      icon: "📦",
+      iconBg: "#E1F5EE",
+      title: "Code Vault",
+      sub: "34 snippets saved",
+      desc: "Saved solutions and templates",
+      pct: 90,
+      barColor: "#1D9E75",
+      tag: "Easy",
+      tagStyle: styles.tagEasy,
+    },
+    {
+      icon: "🔁",
+      iconBg: "#FAEEDA",
+      title: "Learning Loop",
+      sub: "Due today: 5",
+      desc: "Spaced revision — Dynamic Programming",
+      pct: 55,
+      barColor: "#BA7517",
+      tag: "Medium",
+      tagStyle: styles.tagMed,
+    },
+  ];
 
-  const leaderboard = [/* same as before */];
+  const leaderboard = [
+    { rank: 1, name: "Alex", score: 2450 },
+    { rank: 2, name: "Sarah", score: 2310 },
+    { rank: 3, name: "You", score: 1240 },
+    { rank: 4, name: "Jordan", score: 1190 },
+  ];
 
   return (
     <div style={styles.wrapper}>
-      <div style={styles.bgGlow} />
+      <div style={styles.content}>
 
-      <section style={styles.content}>
         {/* STATS */}
+        <SectionTitle>📊 Overview</SectionTitle>
         <div style={styles.statGrid}>
           <StatCard icon="🔥" label="Streak" value={12} suffix=" days" />
-          <StatCard icon="⭐" label="Points" value={1240} badge="Top 10%" badgeColor="purple" />
+          <StatCard icon="⭐" label="Points" value={1240} badge="Top 10%" />
           <StatCard icon="📘" label="Solved" value={86} />
           <StatCard icon="🏆" label="Rank" value="#142" />
         </div>
 
         {/* CHALLENGES */}
+        <SectionTitle>⚔️ Active Challenges</SectionTitle>
         <div style={styles.cardGrid}>
           {challenges.map((c, i) => (
             <ChallengeCard key={i} {...c} />
@@ -146,142 +183,152 @@ export default function Dashboard() {
         </div>
 
         {/* BOTTOM */}
+        <SectionTitle>📈 Insights</SectionTitle>
         <div style={styles.bottomGrid}>
-          <motion.div whileHover={{ y: -2 }} style={styles.panel}>
+
+          <div style={styles.panel}>
             <div style={styles.panelTitle}>⚡ Recent Activity</div>
             <div style={styles.activityItem}>Solved Binary Search</div>
             <div style={styles.activityItem}>Joined Arena</div>
             <div style={styles.activityItem}>Saved BFS template</div>
-          </motion.div>
+          </div>
 
-          <motion.div whileHover={{ y: -2 }} style={styles.panel}>
+          <div style={styles.panel}>
             <div style={styles.panelTitle}>🏆 Leaderboard</div>
             {leaderboard.map((l, i) => (
-              <div key={i} style={{ ...styles.lbRow, ...(l.me ? styles.lbMe : {}) }}>
+              <div key={i} style={styles.lbRow}>
                 <span>{l.rank}</span>
                 <span style={{ flex: 1 }}>{l.name}</span>
                 <span>{l.score}</span>
               </div>
             ))}
-          </motion.div>
+          </div>
+
         </div>
-      </section>
+
+      </div>
     </div>
   );
 }
 
-/* ─── STYLES (IMPROVED RESPONSIVE + MODERN UI) ─── */
+/* ─── STYLES ─── */
 
 const styles = {
   wrapper: {
     minHeight: "100vh",
-    background: "radial-gradient(circle at top, #f7f8ff, #eef1f8)",
+    background: "#f4f6fb",
     fontFamily: "Inter, sans-serif",
-    display: "flex",
-    justifyContent: "center",
-    padding: 12,
-  },
-
-  bgGlow: {
-    position: "fixed",
-    width: 400,
-    height: 400,
-    background: "rgba(127,119,221,0.15)",
-    filter: "blur(120px)",
-    top: -100,
-    left: -100,
-    zIndex: 0,
+    overflowX: "hidden",
   },
 
   content: {
-    position: "relative",
-    zIndex: 2,
-    width: "100%",
-    maxWidth: 1100,
+    padding: 18,
     display: "flex",
     flexDirection: "column",
-    gap: 16,
+    gap: 14,
+  },
+
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: 600,
+    color: "#666",
+    marginTop: 10,
   },
 
   statGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-    gap: 12,
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: 10,
   },
 
   statCard: {
-    background: "rgba(255,255,255,0.8)",
-    backdropFilter: "blur(10px)",
-    padding: 14,
-    borderRadius: 16,
-    border: "1px solid rgba(0,0,0,0.05)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
-    transition: "all 0.3s ease",
+    background: "white",
+    padding: 12,
+    borderRadius: 14,
+    boxShadow: "0 6px 18px rgba(0,0,0,0.05)",
   },
 
-  statLabel: {
+  statLabelRow: {
     display: "flex",
-    justifyContent: "space-between",
-    fontSize: 12,
-    color: "#666",
-    marginBottom: 6,
+    alignItems: "center",
+    gap: 6,
+    fontSize: 11,
+    color: "#777",
   },
 
   statValue: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 600,
+    marginTop: 6,
   },
 
-  suffix: { fontSize: 12, marginLeft: 4, color: "#888" },
+  suffix: {
+    fontSize: 12,
+    marginLeft: 4,
+    color: "#888",
+  },
 
   badge: {
     fontSize: 10,
-    padding: "3px 8px",
+    padding: "2px 6px",
     borderRadius: 20,
   },
 
-  badgePurple: { background: "#eeeaff", color: "#4b42c8" },
-  badgeGreen: { background: "#e8f7ef", color: "#1e7a4f" },
+  badgeGreen: { background: "#EAF3DE", color: "#3B6D11" },
+  badgePurple: { background: "#EEEDFE", color: "#534AB7" },
 
   cardGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-    gap: 12,
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+    gap: 10,
   },
 
   challengeCard: {
-    background: "rgba(255,255,255,0.9)",
-    backdropFilter: "blur(10px)",
-    padding: 16,
-    borderRadius: 16,
-    border: "1px solid rgba(0,0,0,0.05)",
+    background: "white",
+    padding: 14,
+    borderRadius: 14,
+    boxShadow: "0 6px 18px rgba(0,0,0,0.05)",
+    minWidth: 0,
   },
 
-  cardTop: {
-    display: "flex",
-    gap: 10,
-    alignItems: "center",
-    marginBottom: 8,
-  },
+  cardTop: { display: "flex", gap: 10, marginBottom: 8 },
 
   cardIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
+    width: 30,
+    height: 30,
+    borderRadius: 8,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
 
-  cardTitle: { fontSize: 14, fontWeight: 600 },
-  cardSub: { fontSize: 11, color: "#777" },
+  cardTitle: { fontSize: 13, fontWeight: 600 },
+  cardSub: { fontSize: 10, color: "#888" },
   cardDesc: { fontSize: 12, color: "#555", marginBottom: 10 },
 
-  tag: { fontSize: 10, padding: "3px 8px", borderRadius: 20 },
+  tag: {
+    fontSize: 10,
+    padding: "2px 6px",
+    borderRadius: 20,
+  },
 
-  tagEasy: { background: "#e7f7ee", color: "#1e7a4f" },
-  tagMed: { background: "#fff3dd", color: "#7a4a12" },
-  tagHard: { background: "#ffe6e6", color: "#8a1f1f" },
+tagEasy: {
+  background: "#EAF3DE",
+  color: "#3B6D11",
+  borderColor: "#CFE6B8",
+},
+
+tagMed: {
+  background: "#FAEEDA",
+  color: "#8A4B00",
+  borderColor: "#F3D3A1",
+},
+
+tagHard: {
+  background: "#FCEBEB",
+  color: "#8B1E1E",
+  borderColor: "#F5B5B5",
+},
 
   progressTrack: {
     height: 5,
@@ -293,31 +340,58 @@ const styles = {
   progressFill: {
     height: "100%",
     borderRadius: 10,
+    transition: "width 0.8s ease",
+  },
+
+  progLabel: {
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: 11,
+    color: "#777",
+    marginTop: 6,
   },
 
   bottomGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: 12,
+    gap: 10,
   },
 
   panel: {
-    background: "rgba(255,255,255,0.9)",
-    padding: 16,
-    borderRadius: 16,
-    border: "1px solid rgba(0,0,0,0.05)",
+    background: "white",
+    padding: 14,
+    borderRadius: 14,
+    boxShadow: "0 6px 18px rgba(0,0,0,0.05)",
   },
 
-  panelTitle: { fontSize: 14, fontWeight: 600, marginBottom: 10 },
-
-  activityItem: { fontSize: 12, padding: "6px 0", color: "#555" },
-
-  lbRow: { display: "flex", gap: 10, fontSize: 12, padding: "6px 0" },
-
-  lbMe: {
-    background: "#eeeaff",
-    borderRadius: 10,
-    padding: 6,
+  panelTitle: {
+    fontSize: 13,
     fontWeight: 600,
+    marginBottom: 10,
   },
+
+  activityItem: {
+    fontSize: 12,
+    padding: "6px 0",
+    color: "#555",
+  },
+
+  lbRow: {
+    display: "flex",
+    gap: 10,
+    fontSize: 12,
+    padding: "6px 0",
+  },
+  tagBase: {
+  fontSize: 10,
+  padding: "3px 8px",
+  borderRadius: 999,
+  fontWeight: 600,
+  lineHeight: 1,
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  border: "1px solid transparent",
+},
+
 };
